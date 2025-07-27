@@ -37,5 +37,4 @@ class MemeEndpoint(BaseEndpoint):
             assert meme["tags"] == tags, f"Expected tags '{tags}', got '{meme['tags']}'"
         if info:
             assert meme["info"] == info, f"Expected info '{info}', got '{meme['info']}'"
-
         self.logger.info("Мем прошел валидацию успешно")
