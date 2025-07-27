@@ -12,17 +12,6 @@ class BaseEndpoint:
         self.last_data = None
         self.logger = setup_logger(self.__class__.__name__)
 
-    def request(self, method, endpoint, **kwargs):
-        url = f"{self.base_url}{endpoint}"
-        self.logger.info(f"{method.upper()} {url}")
-        self.last_response = requests.request(method, url, headers=self.headers, **kwargs)
-
-        try:
-            self.last_data = self.last_response.json()
-        except ValueError:
-            self.last_data = None
-        return self
-
     def check_status_code(self, expected_code):
         actual_code = self.last_response.status_code
         assert actual_code == expected_code, (
