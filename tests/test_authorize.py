@@ -1,12 +1,15 @@
+import pytest
 import allure
 from endpoints.authorize import AuthorizeEndpoint
 from constants import USER_NAME
 
-@allure.feature("Authorize API")
-def test_authorize():
+@pytest.mark.positive
+@allure.feature("Authorization")
+@allure.title("Успешная авторизация с валидным именем пользователя")
+@allure.severity(allure.severity_level.CRITICAL)
+def test_authorize_success():
     endpoint = AuthorizeEndpoint()
-
-    with allure.step(f"Авторизация пользователя '{USER_NAME}'"):
+    with allure.step(f"Аторизация пользователя '{USER_NAME}'"):
         endpoint.authorize(USER_NAME)
         endpoint.check_status_code(200)
 
