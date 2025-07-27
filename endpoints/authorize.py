@@ -1,3 +1,4 @@
+import requests
 from endpoints.base_endpoint import BaseEndpoint
 
 
