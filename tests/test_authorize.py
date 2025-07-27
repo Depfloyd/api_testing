@@ -6,7 +6,7 @@ from constants import USER_NAME
 def test_authorize():
     endpoint = AuthorizeEndpoint()
 
-    with allure.step(f"Аторизация пользователя '{USER_NAME}'"):
+    with allure.step(f"Авторизация пользователя '{USER_NAME}'"):
         endpoint.authorize(USER_NAME)
         endpoint.check_status_code(200)
 
