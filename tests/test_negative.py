@@ -7,14 +7,18 @@ from endpoints.authorize import AuthorizeEndpoint
 
 @pytest.mark.negative
 @allure.feature("Negative Tests")
-@allure.title("Авторизация с пустым именем (ожидается user = '')")
+@allure.title("Авторизация с пустым телом запроса (ожидается 400)")
 @allure.severity(allure.severity_level.MINOR)
-def test_authorize_with_empty_name():
+def test_authorize_with_empty_body():
     endpoint = AuthorizeEndpoint()
-    with allure.step("Авторизация с пустым именем"):
-        endpoint.authorize("")
-        endpoint.check_status_code(200)
-        assert endpoint.last_data["user"] == "", "Expected user to be empty string"
+    with allure.step("Попытка авторизации с пустым телом запроса"):
+        endpoint.post_authorize(json={})
+        endpoint.check_status_code(400)
+        assert endpoint.last_data, "Response body is empty"
+        if isinstance(endpoint.last_data, dict):
+            assert "error" in endpoint.last_data or "message" in endpoint.last_data
+        else:
+            assert "Bad Request" in endpoint.last_data or "Invalid" in endpoint.last_data
 
 
 @pytest.mark.negative
@@ -61,71 +65,64 @@ def test_delete_nonexistent_meme(meme_endpoint):
 
 @pytest.mark.negative
 @allure.feature("Negative Tests")
-@allure.title("Создание мема: поле tags не является массивом (ожидается 400)")
+@allure.title("Создание/обновление мема с некорректными типами полей (ожидается 400)")
 @allure.severity(allure.severity_level.CRITICAL)
-def test_create_meme_with_json_instead_of_array(meme_endpoint):
-    payload = {
-        "text": "Invalid Meme",
-        "url": "http://example.com/meme.jpg",
-        "tags": {"not": "an array"},
-        "info": {"author": "QA"}
-    }
-    meme_endpoint.last_response = requests.post(
-        f"{meme_endpoint.base_url}/meme", json=payload, headers=meme_endpoint.headers
-    )
-    meme_endpoint.check_status_code(400)
+@pytest.mark.parametrize(
+    "payload, method, path",
+    [
+        (
+            {
+                "text": "Invalid Meme",
+                "url": "http://example.com/meme.jpg",
+                "tags": {"not": "an array"},
+                "info": {"author": "QA"},
+            },
+            "POST",
+            "/meme"
+        ),
+        (
+                {
+                    "text": "Invalid Meme",
+                    "url": "http://example.com/meme.jpg",
+                    "tags": ["tag1", "tag2"],
+                    "info": ["not", "an", "object"]
+                },
+            "POST",
+            "/meme"
+        ),
+        (
+            lambda meme_id: {
+                "id": meme_id,
+                "text": "Updated Invalid Meme",
+                "url": "http://example.com/updated.jpg",
+                "tags": {"invalid": "json"},
+                "info": {"author": "QA"}
+            },
+            "PUT",
+            "/meme/{id}",
+        ),
+        (
+            lambda meme_id: {
+                "id": meme_id,
+                "text": "Updated Invalid Meme",
+                "url": "http://example.com/updated.jpg",
+                "tags": ["valid", "tags"],
+                "info": ["not", "an", "object"]
+            },
+            "PUT",
+            "/meme/{id}",
+        ),
+    ],
+)
+def test_meme_payload_type_validation(meme_endpoint, payload, method, path, request):
+    if callable(payload):
+        meme_id = request.getfixturevalue("temp_meme")
+        payload = payload(meme_id)
+        url = f"{meme_endpoint.base_url}{path.format(id=meme_id)}"
+    else:
+        url = f"{meme_endpoint.base_url}{path}"
 
-
-@pytest.mark.negative
-@allure.feature("Negative Tests")
-@allure.title("Создание мема: поле info передано как массив (ожидается 400)")
-@allure.severity(allure.severity_level.CRITICAL)
-def test_create_meme_with_json_instead_of_object(meme_endpoint):
-    payload = {
-        "text": "Invalid Meme",
-        "url": "http://example.com/meme.jpg",
-        "tags": ["tag1", "tag2"],
-        "info": ["not", "an", "object"]
-    }
-    meme_endpoint.last_response = requests.post(
-        f"{meme_endpoint.base_url}/meme", json=payload, headers=meme_endpoint.headers
-    )
-    meme_endpoint.check_status_code(400)
-
-
-@pytest.mark.negative
-@allure.feature("Negative Tests")
-@allure.title("Обновление мема: поле tags не массив (ожидается 400)")
-@allure.severity(allure.severity_level.CRITICAL)
-def test_update_meme_with_json_instead_of_array(meme_endpoint, temp_meme):
-    payload = {
-        "id": temp_meme,
-        "text": "Updated Invalid Meme",
-        "url": "http://example.com/updated.jpg",
-        "tags": {"invalid": "json"},
-        "info": {"author": "QA"}
-    }
-    meme_endpoint.last_response = requests.put(
-        f"{meme_endpoint.base_url}/meme/{temp_meme}",
-        json=payload, headers=meme_endpoint.headers
-    )
-    meme_endpoint.check_status_code(400)
-
-
-@pytest.mark.negative
-@allure.feature("Negative Tests")
-@allure.title("Обновление мема: поле info передано как массив (ожидается 400)")
-@allure.severity(allure.severity_level.CRITICAL)
-def test_update_meme_with_array_instead_of_object(meme_endpoint, temp_meme):
-    payload = {
-        "id": temp_meme,
-        "text": "Updated Invalid Meme",
-        "url": "http://example.com/updated.jpg",
-        "tags": ["valid", "tags"],
-        "info": ["not", "an", "object"]
-    }
-    meme_endpoint.last_response = requests.put(
-        f"{meme_endpoint.base_url}/meme/{temp_meme}",
-        json=payload, headers=meme_endpoint.headers
+    meme_endpoint.last_response = requests.request(
+        method, url, json=payload, headers=meme_endpoint.headers
     )
     meme_endpoint.check_status_code(400)

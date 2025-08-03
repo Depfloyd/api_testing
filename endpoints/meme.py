@@ -16,7 +16,7 @@ class MemeEndpoint(BaseEndpoint):
             self.last_data = self.last_response.json()
         else:
             self.last_data = None
-        return self
+        return self.last_data
 
     def create(self, text, url, tags, info):
         self.logger.info(f"Создание мема: {text}")
