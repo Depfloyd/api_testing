@@ -3,10 +3,10 @@ from endpoints.base_endpoint import BaseEndpoint
 
 class AuthorizeEndpoint(BaseEndpoint):
 
-    def post_authorize(self, json=None):
-        self.logger.info(f"POST /authorize с json={json}")
+    def post_authorize(self, name):
+        self.logger.info(f"Авторизация пользователя: '{name}'")
         self.last_response = requests.post(
-            f"{self.base_url}/authorize", json=json
+            f"{self.base_url}/authorize", json={"name": name}
         )
         try:
             self.last_data = self.last_response.json()

@@ -1,5 +1,6 @@
 import pytest
 from endpoints.meme import MemeEndpoint
+from endpoints.authorize import AuthorizeEndpoint
 from utils.helpers import random_string
 
 
@@ -30,3 +31,8 @@ def meme_to_delete(meme_endpoint):
     meme_id = meme_endpoint.last_data["id"]
     yield meme_id
     meme_endpoint.delete(meme_id)
+
+
+@pytest.fixture()
+def authorize_endpoint():
+    return AuthorizeEndpoint()

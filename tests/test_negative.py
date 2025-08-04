@@ -2,23 +2,21 @@ import pytest
 import allure
 import requests
 from endpoints.meme import MemeEndpoint
-from endpoints.authorize import AuthorizeEndpoint
 
 
 @pytest.mark.negative
 @allure.feature("Negative Tests")
 @allure.title("Авторизация с пустым телом запроса (ожидается 400)")
 @allure.severity(allure.severity_level.MINOR)
-def test_authorize_with_empty_body():
-    endpoint = AuthorizeEndpoint()
+def test_authorize_with_empty_body(authorize_endpoint):
     with allure.step("Попытка авторизации с пустым телом запроса"):
-        endpoint.post_authorize(json={})
-        endpoint.check_status_code(400)
-        assert endpoint.last_data, "Response body is empty"
-        if isinstance(endpoint.last_data, dict):
-            assert "error" in endpoint.last_data or "message" in endpoint.last_data
+        authorize_endpoint.post_authorize({})
+        authorize_endpoint.check_status_code(400)
+        assert authorize_endpoint.last_data, "Response body is empty"
+        if isinstance(authorize_endpoint.last_data, dict):
+            assert "error" in authorize_endpoint.last_data or "message" in authorize_endpoint.last_data
         else:
-            assert "Bad Request" in endpoint.last_data or "Invalid" in endpoint.last_data
+            assert "Bad Request" in authorize_endpoint.last_data or "Invalid" in authorize_endpoint.last_data
 
 
 @pytest.mark.negative
