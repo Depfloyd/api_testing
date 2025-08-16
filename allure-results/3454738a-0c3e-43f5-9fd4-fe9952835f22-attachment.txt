@@ -1,0 +1,6 @@
+[2025-07-27 18:08:17] INFO - Создание мема: bgJnbvQChW
+[2025-07-27 18:08:17] INFO - Checked status code: 200 (expected: 200)
+[2025-07-27 18:08:17] INFO - Удаление мема ID: 1768
+[2025-07-27 18:08:17] INFO - Checked status code: 200 (expected: 200)
+[2025-07-27 18:08:17] INFO - Получение мема по ID: 1768
+[2025-07-27 18:08:17] INFO - Checked status code: 404 (expected: 404)

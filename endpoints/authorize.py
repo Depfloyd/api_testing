@@ -24,3 +24,7 @@ class AuthorizeEndpoint(BaseEndpoint):
         self.logger.info(f"Проверка валидности токена: {token}")
         self.last_response = requests.get(f"{self.base_url}/authorize/{token}")
         return self
+
+    def validate_empty_body_error(self):
+        """Проверяет ошибку при отправке пустого тела запроса"""
+        self.validate_error_response(["Bad Request", "Invalid", "error", "message"])

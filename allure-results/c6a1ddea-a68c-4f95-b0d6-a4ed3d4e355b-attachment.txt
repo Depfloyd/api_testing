@@ -1,0 +1,5 @@
+[2025-07-27 17:45:48] INFO - Авторизация пользователя: 'TestUser'
+[2025-07-27 17:45:48] INFO - Checked status code: 200 (expected: 200)
+[2025-07-27 17:45:48] INFO - Получен токен: l44iyWfm0yNEPFK
+[2025-07-27 17:45:48] INFO - Проверка валидности токена: l44iyWfm0yNEPFK
+[2025-07-27 17:45:48] INFO - Checked status code: 200 (expected: 200)

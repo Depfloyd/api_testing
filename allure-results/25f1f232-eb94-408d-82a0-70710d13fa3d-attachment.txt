@@ -1,0 +1,5 @@
+[32mINFO    [0m AuthorizeEndpoint:authorize.py:7 Авторизация пользователя: 'TestUser'
+[32mINFO    [0m AuthorizeEndpoint:base_endpoint.py:20 Checked status code: 200 (expected: 200)
+[32mINFO    [0m AuthorizeEndpoint:authorize.py:17 Получен токен: XqMIDEEZ6ocJ6fp
+[32mINFO    [0m AuthorizeEndpoint:authorize.py:21 Проверка валидности токена: XqMIDEEZ6ocJ6fp
+[32mINFO    [0m AuthorizeEndpoint:base_endpoint.py:20 Checked status code: 200 (expected: 200)

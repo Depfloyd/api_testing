@@ -1,0 +1,2 @@
+[32mINFO    [0m MemeEndpoint:meme.py:7 Получение списка всех мемов
+[32mINFO    [0m MemeEndpoint:base_endpoint.py:20 Checked status code: 200 (expected: 200)

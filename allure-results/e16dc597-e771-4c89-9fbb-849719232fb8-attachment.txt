@@ -1,0 +1,1 @@
+[32mINFO    [0m MemeEndpoint:base_endpoint.py:20 Checked status code: 400 (expected: 400)

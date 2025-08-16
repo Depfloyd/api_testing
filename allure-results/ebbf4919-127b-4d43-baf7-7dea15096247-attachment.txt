@@ -1,0 +1,5 @@
+[2025-07-27 18:08:13] INFO - Авторизация пользователя: 'TestUser'
+[2025-07-27 18:08:13] INFO - Checked status code: 200 (expected: 200)
+[2025-07-27 18:08:13] INFO - Получен токен: XqMIDEEZ6ocJ6fp
+[2025-07-27 18:08:13] INFO - Проверка валидности токена: XqMIDEEZ6ocJ6fp
+[2025-07-27 18:08:14] INFO - Checked status code: 200 (expected: 200)

@@ -1,0 +1,4 @@
+[32mINFO    [0m MemeEndpoint:meme.py:22 Создание мема: Meme_eXaUsNNTWn
+[32mINFO    [0m MemeEndpoint:base_endpoint.py:20 Checked status code: 200 (expected: 200)
+[32mINFO    [0m MemeEndpoint:base_endpoint.py:20 Checked status code: 400 (expected: 400)
+[32mINFO    [0m MemeEndpoint:meme.py:36 Удаление мема ID: 1770

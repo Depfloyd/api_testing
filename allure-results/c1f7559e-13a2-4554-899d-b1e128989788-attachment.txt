@@ -1,0 +1,6 @@
+[2025-07-27 17:45:51] INFO - Создание мема: SEJXSkAJKo
+[2025-07-27 17:45:52] INFO - Checked status code: 200 (expected: 200)
+[2025-07-27 17:45:52] INFO - Удаление мема ID: 1767
+[2025-07-27 17:45:52] INFO - Checked status code: 200 (expected: 200)
+[2025-07-27 17:45:52] INFO - Получение мема по ID: 1767
+[2025-07-27 17:45:52] INFO - Checked status code: 404 (expected: 404)

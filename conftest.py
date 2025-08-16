@@ -1,10 +1,11 @@
 import pytest
 from endpoints.meme import MemeEndpoint
 from endpoints.authorize import AuthorizeEndpoint
+from endpoints.unauthorized_endpoint import UnauthorizedMemeEndpoint
 from utils.helpers import random_string
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def meme_endpoint():
     return MemeEndpoint()
 
@@ -36,3 +37,9 @@ def meme_to_delete(meme_endpoint):
 @pytest.fixture()
 def authorize_endpoint():
     return AuthorizeEndpoint()
+
+
+@pytest.fixture
+def unauthorized_endpoint():
+    """Фикстура для создания endpoint без авторизации"""
+    return UnauthorizedMemeEndpoint()

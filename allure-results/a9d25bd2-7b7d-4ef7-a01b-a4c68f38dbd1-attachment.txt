@@ -1,0 +1,5 @@
+[2025-07-27 18:08:15] INFO - Создание мема: Meme_gMjuWDUhRa
+[2025-07-27 18:08:15] INFO - Checked status code: 200 (expected: 200)
+[2025-07-27 18:08:15] INFO - Получение мема по ID: 1768
+[2025-07-27 18:08:15] INFO - Checked status code: 200 (expected: 200)
+[2025-07-27 18:08:15] INFO - Удаление мема ID: 1768

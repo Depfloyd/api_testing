@@ -1,0 +1,2 @@
+[32mINFO    [0m MemeEndpoint:meme.py:13 Получение мема по ID: 9999999
+[32mINFO    [0m MemeEndpoint:base_endpoint.py:20 Checked status code: 404 (expected: 404)
