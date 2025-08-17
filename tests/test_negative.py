@@ -1,5 +1,10 @@
 import pytest
 import allure
+from constants import (
+    TEST_MEME_TEXT, TEST_MEME_URL, TEST_MEME_TAGS, TEST_MEME_INFO,
+    UPDATED_MEME_TEXT, UPDATED_MEME_URL, UPDATED_MEME_TAGS, UPDATED_MEME_INFO,
+    INVALID_TOKEN
+)
 
 
 @pytest.mark.negative
@@ -64,7 +69,7 @@ def test_delete_nonexistent_meme(meme_endpoint):
         (
             {
                 "text": "Invalid Meme",
-                "url": "http://example.com/meme.jpg",
+                "url": TEST_MEME_URL,
                 "tags": {"not": "an array"},
                 "info": {"author": "QA"},
             },
@@ -74,7 +79,7 @@ def test_delete_nonexistent_meme(meme_endpoint):
         (
                 {
                     "text": "Invalid Meme",
-                    "url": "http://example.com/meme.jpg",
+                    "url": TEST_MEME_URL,
                     "tags": ["tag1", "tag2"],
                     "info": ["not", "an", "object"]
                 },
@@ -85,7 +90,7 @@ def test_delete_nonexistent_meme(meme_endpoint):
             lambda meme_id: {
                 "id": meme_id,
                 "text": "Updated Invalid Meme",
-                "url": "http://example.com/updated.jpg",
+                "url": UPDATED_MEME_URL,
                 "tags": {"invalid": "json"},
                 "info": {"author": "QA"}
             },
@@ -96,7 +101,7 @@ def test_delete_nonexistent_meme(meme_endpoint):
             lambda meme_id: {
                 "id": meme_id,
                 "text": "Updated Invalid Meme",
-                "url": "http://example.com/updated.jpg",
+                "url": UPDATED_MEME_URL,
                 "tags": ["valid", "tags"],
                 "info": ["not", "an", "object"]
             },
@@ -142,10 +147,10 @@ def test_get_meme_by_id_without_token(unauthorized_endpoint):
 def test_create_meme_without_token(unauthorized_endpoint):
     with allure.step("Попытка создать мем без токена авторизации"):
         unauthorized_endpoint.create(
-            "Test Meme", 
-            "http://example.com/meme.jpg", 
-            ["test"], 
-            {"author": "me"}
+            TEST_MEME_TEXT, 
+            TEST_MEME_URL, 
+            TEST_MEME_TAGS, 
+            TEST_MEME_INFO
         )
         unauthorized_endpoint.check_status_code(401)
 
@@ -158,10 +163,10 @@ def test_update_meme_without_token(unauthorized_endpoint):
     with allure.step("Попытка обновить мем без токена авторизации"):
         unauthorized_endpoint.update(
             1,
-            "Updated Meme", 
-            "http://example.com/updated.jpg", 
-            ["updated"], 
-            {"author": "updated_author"}
+            UPDATED_MEME_TEXT, 
+            UPDATED_MEME_URL, 
+            UPDATED_MEME_TAGS, 
+            UPDATED_MEME_INFO
         )
         unauthorized_endpoint.check_status_code(401)
 
@@ -182,7 +187,7 @@ def test_delete_meme_without_token(unauthorized_endpoint):
 @allure.severity(allure.severity_level.CRITICAL)
 def test_get_all_memes_with_invalid_token(unauthorized_endpoint):
     with allure.step("Попытка получить список мемов с невалидным токеном"):
-        headers = {"Authorization": "Bearer INVALID_TOKEN_12345"}
+        headers = {"Authorization": f"Bearer {INVALID_TOKEN}"}
         unauthorized_endpoint.get_all(headers=headers)
         unauthorized_endpoint.check_status_code(401)
 
@@ -193,7 +198,7 @@ def test_get_all_memes_with_invalid_token(unauthorized_endpoint):
 @allure.severity(allure.severity_level.CRITICAL)
 def test_get_meme_by_id_with_invalid_token(unauthorized_endpoint):
     with allure.step("Попытка получить мем по ID с невалидным токеном"):
-        headers = {"Authorization": "Bearer INVALID_TOKEN_12345"}
+        headers = {"Authorization": f"Bearer {INVALID_TOKEN}"}
         unauthorized_endpoint.get_one(1, headers=headers)
         unauthorized_endpoint.check_status_code(401)
 
@@ -204,12 +209,12 @@ def test_get_meme_by_id_with_invalid_token(unauthorized_endpoint):
 @allure.severity(allure.severity_level.CRITICAL)
 def test_create_meme_with_invalid_token(unauthorized_endpoint):
     with allure.step("Попытка создать мем с невалидным токеном"):
-        headers = {"Authorization": "Bearer INVALID_TOKEN_12345"}
+        headers = {"Authorization": f"Bearer {INVALID_TOKEN}"}
         unauthorized_endpoint.create(
-            "Test Meme", 
-            "http://example.com/meme.jpg", 
-            ["test"], 
-            {"author": "me"},
+            TEST_MEME_TEXT, 
+            TEST_MEME_URL, 
+            TEST_MEME_TAGS, 
+            TEST_MEME_INFO,
             headers=headers
         )
         unauthorized_endpoint.check_status_code(401)
@@ -221,13 +226,13 @@ def test_create_meme_with_invalid_token(unauthorized_endpoint):
 @allure.severity(allure.severity_level.CRITICAL)
 def test_update_meme_with_invalid_token(unauthorized_endpoint):
     with allure.step("Попытка обновить мем с невалидным токеном"):
-        headers = {"Authorization": "Bearer INVALID_TOKEN_12345"}
+        headers = {"Authorization": f"Bearer {INVALID_TOKEN}"}
         unauthorized_endpoint.update(
             1,
-            "Updated Meme", 
-            "http://example.com/updated.jpg", 
-            ["updated"], 
-            {"author": "updated_author"},
+            UPDATED_MEME_TEXT, 
+            UPDATED_MEME_URL, 
+            UPDATED_MEME_TAGS, 
+            UPDATED_MEME_INFO,
             headers=headers
         )
         unauthorized_endpoint.check_status_code(401)
@@ -239,7 +244,7 @@ def test_update_meme_with_invalid_token(unauthorized_endpoint):
 @allure.severity(allure.severity_level.CRITICAL)
 def test_delete_meme_with_invalid_token(unauthorized_endpoint):
     with allure.step("Попытка удалить мем с невалидным токеном"):
-        headers = {"Authorization": "Bearer INVALID_TOKEN_12345"}
+        headers = {"Authorization": f"Bearer {INVALID_TOKEN}"}
         unauthorized_endpoint.delete(1, headers=headers)
         unauthorized_endpoint.check_status_code(401)
 
@@ -252,7 +257,7 @@ def test_get_all_memes_with_empty_token(unauthorized_endpoint):
     with allure.step("Попытка получить список мемов с пустым токеном"):
         headers = {"Authorization": ""}
         unauthorized_endpoint.get_all(headers=headers)
-        unauthorized_endpoint.check_status_code_in_range([401, 500])
+        unauthorized_endpoint.check_status_code(401)
 
 
 @pytest.mark.unauthorized
@@ -263,7 +268,7 @@ def test_get_meme_by_id_with_empty_token(unauthorized_endpoint):
     with allure.step("Попытка получить мем по ID с пустым токеном"):
         headers = {"Authorization": ""}
         unauthorized_endpoint.get_one(1, headers=headers)
-        unauthorized_endpoint.check_status_code_in_range([401, 500])
+        unauthorized_endpoint.check_status_code(401)
 
 
 @pytest.mark.unauthorized
@@ -274,13 +279,13 @@ def test_create_meme_with_empty_token(unauthorized_endpoint):
     with allure.step("Попытка создать мем с пустым токеном"):
         headers = {"Authorization": ""}
         unauthorized_endpoint.create(
-            "Test Meme", 
-            "http://example.com/meme.jpg", 
-            ["test"], 
-            {"author": "me"},
+            TEST_MEME_TEXT, 
+            TEST_MEME_URL, 
+            TEST_MEME_TAGS, 
+            TEST_MEME_INFO,
             headers=headers
         )
-        unauthorized_endpoint.check_status_code_in_range([401, 500])
+        unauthorized_endpoint.check_status_code(401)
 
 
 @pytest.mark.unauthorized
@@ -292,13 +297,13 @@ def test_update_meme_with_empty_token(unauthorized_endpoint):
         headers = {"Authorization": ""}
         unauthorized_endpoint.update(
             1,
-            "Updated Meme", 
-            "http://example.com/updated.jpg", 
-            ["updated"], 
-            {"author": "updated_author"},
+            UPDATED_MEME_TEXT, 
+            UPDATED_MEME_URL, 
+            UPDATED_MEME_TAGS, 
+            UPDATED_MEME_INFO,
             headers=headers
         )
-        unauthorized_endpoint.check_status_code_in_range([401, 500])
+        unauthorized_endpoint.check_status_code(401)
 
 
 @pytest.mark.unauthorized
@@ -309,4 +314,4 @@ def test_delete_meme_with_empty_token(unauthorized_endpoint):
     with allure.step("Попытка удалить мем с пустым токеном"):
         headers = {"Authorization": ""}
         unauthorized_endpoint.delete(1, headers=headers)
-        unauthorized_endpoint.check_status_code_in_range([401, 500])
+        unauthorized_endpoint.check_status_code(401)

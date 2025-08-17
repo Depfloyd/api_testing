@@ -1,5 +1,9 @@
 import pytest
 import allure
+from constants import (
+    TEST_MEME_TEXT, TEST_MEME_URL, TEST_MEME_TAGS, TEST_MEME_INFO,
+    UPDATED_MEME_TEXT, UPDATED_MEME_URL, UPDATED_MEME_TAGS, UPDATED_MEME_INFO
+)
 
 
 @pytest.mark.positive
@@ -8,13 +12,13 @@ import allure
 @allure.severity(allure.severity_level.CRITICAL)
 def test_create_meme(meme_endpoint):
     with allure.step("Создание нового мема"):
-        meme_endpoint.create("Test Meme", "http://example.com/meme.jpg", ["test"], {"author": "me"})
+        meme_endpoint.create(TEST_MEME_TEXT, TEST_MEME_URL, TEST_MEME_TAGS, TEST_MEME_INFO)
         meme_endpoint.check_status_code(200)
         meme_endpoint.validate_meme(
-            text="Test Meme",
-            url="http://example.com/meme.jpg",
-            tags=["test"],
-            info={"author": "me"}
+            text=TEST_MEME_TEXT,
+            url=TEST_MEME_URL,
+            tags=TEST_MEME_TAGS,
+            info=TEST_MEME_INFO
         )
 
 @pytest.mark.positive
@@ -46,17 +50,17 @@ def test_update_meme(meme_endpoint, temp_meme):
     with allure.step("Обновление существующего мема"):
         meme_endpoint.update(
             temp_meme,
-            text="Updated Meme",
-            url="http://example.com/updated.jpg",
-            tags=["updated"],
-            info={"author": "updated_author"}
+            text=UPDATED_MEME_TEXT,
+            url=UPDATED_MEME_URL,
+            tags=UPDATED_MEME_TAGS,
+            info=UPDATED_MEME_INFO
         )
         meme_endpoint.check_status_code(200)
         meme_endpoint.validate_meme(
-            text="Updated Meme",
-            url="http://example.com/updated.jpg",
-            tags=["updated"],
-            info={"author": "updated_author"}
+            text=UPDATED_MEME_TEXT,
+            url=UPDATED_MEME_URL,
+            tags=UPDATED_MEME_TAGS,
+            info=UPDATED_MEME_INFO
         )
 
 @pytest.mark.positive
